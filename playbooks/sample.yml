@@ -1,0 +1,4 @@
+- hosts: server
+  tasks:
+  - name: touch text file
+    shell: touch /tmp/example.txt
