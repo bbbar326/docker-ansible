@@ -1,0 +1,5 @@
+- hosts: wordpress
+  connection: docker
+  tasks:
+  - name: touch text file
+    shell: touch /tmp/example.txt

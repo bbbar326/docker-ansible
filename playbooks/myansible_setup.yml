@@ -5,3 +5,5 @@
     shell: yum install -y bind-utils
   - name: net-tools install
     shell: yum install -y net-tools
+  - name: docker install
+    shell: yum install -y docker
