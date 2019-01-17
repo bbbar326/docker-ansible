@@ -5,5 +5,13 @@
     shell: yum install -y bind-utils
   - name: net-tools install
     shell: yum install -y net-tools
+  - name: docker install set up
+    shell: yum remove docker docker-common docker-selinux docker-engine
+  - name: docker install set up 2
+    shell: yum install -y yum-utils device-mapper-persistent-data lvm2
+  - name: docker install set up 3
+    shell: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+  - name: docker install set up 4
+    shell: yum makecache fast
   - name: docker install
-    shell: yum install -y docker
+    shell: yum install -y docker-ce
