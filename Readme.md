@@ -1,60 +1,26 @@
-# Docker内でAnsible勉強
+# docker-ansible
+Ansible test environments using Docker.
 
-先にDockerをある程度学習していて、これからAnsibleを勉強しようとしている方向けです。  
-勉強用にゲストを(vagrant + )VMで建てるのも気が引けるので、  
-Dockerでゲスト環境とAnsible実行環境をまとめました
+# Usage
+``` shell
+$ git clone git@github.com:bbbar326/docker-ansible.git
+$ cd docker-ansible
+$ docker-compose up
+$ docker-compose exec controller /bin/bash
 
-※コンテナにsshサーバを導入していますが、あくまでも勉強用に導入しています  
-※すぐに学習始められるようにゲスト環境用のsshキー(パスキーなし)をあえて入れます  
-  （変えたい場合は再生成し、イメージを再ビルドしてください）
+## in 'controller' (Docker container) ##
 
-# フォルダ構成
+$ cd ansible
+$ ansible-playbook -k ./setup.yml -vvv -i ./hosts
+$ exit
 
-- config ･･･ ansibleの設定ファイル関連
-- nodes ･･･ ゲスト環境のDockerfile
-- playbooks ･･･ playbookの保存
-- ssh ･･･ ゲスト環境にアクセスするためのsshキー
+## end ##
 
+$ docker-compose exec target /bin/bash
 
-# コンテナの構成
+## in 'target' (Docker container) ##
 
-- centos7、ubuntu16 ･･･ ゲスト環境
-- myansible ･･･ ansible実行環境
+$ cat now.txt
 
-myansibleコンテナでansibleコマンドを実行し、各ゲスト環境を更新する
-
-# 起動方法
-
-以下のコマンドでゲスト環境＋ansible環境が起動されます
+## end ##
 ```
-> docker-compose up -d
-```
-
-# ansible環境を利用する
-
-```
-> docker exec -it xxx(myansibleコンテナID) /bin/bash
-```
-
-# 疎通確認
-
-ubuntuとcentosにpingを送るテスト  
-
-myansibleコンテナで以下のコマンドを実行
-```
-> ansible all -m ping
-```
-
-# playbookの実行
-
-playbooksをmyansibleコンテナの/playbooksにマウントしているので  
-playbooks内に定義ファイルを作成し、myansibleコンテナで実行してください
-
-```
-> ansible-playbook all /playbooks/xxxx.yml
-```
-
-# ゲスト環境が増えた場合
-
-1. docker-compose.ymlのmyansibleサービスのlinksに増やしたゲストのサービス名を追加
-2. config/ansible_hostsに手順1で追加したサービス名を追加
